@@ -22,3 +22,23 @@ def resize_image(image, width=None, height=None):
     resized = cv2.resize(image, (width, height), interpolation=cv2.INTER_AREA)
 
     return resized
+
+
+def crop_image(image, x, y, width, height):
+    """
+    Extract a specific region from an image.
+    """
+    image_height, image_width = image.shape[:2]
+
+    if x < 0 or y < 0:
+        raise ValueError("Crop coordinates cannot be negative.")
+
+    if width <= 0 or height <= 0:
+        raise ValueError("Crop dimensions must be positive.")
+
+    if x + width > image_width or y + height > image_height:
+        raise ValueError("Crop region exceeds image boundaries.")
+
+    cropped = image[y : y + height, x : x + width]
+
+    return cropped
