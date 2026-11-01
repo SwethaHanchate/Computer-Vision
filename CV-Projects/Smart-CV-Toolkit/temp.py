@@ -1,7 +1,13 @@
 from src.image_loader import load_image
+from src.image_info import get_image_info
 
-image = load_image("data/input/sample.jpeg")
+image_path = "data/input/sample.jpeg"
+image = load_image(image_path)
+
+info = get_image_info(image, image_path)
+
 
 print("Image loaded successfully!")
-print("Image shape:", image.shape)
-print("Image dtype:", image.dtype)
+print("Image Information")
+for key, value in info.items():
+    print(f"{key}: {value}")
