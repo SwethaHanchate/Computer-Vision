@@ -48,11 +48,16 @@ annotated = draw_ellipse(annotated, (350, 1100), (150, 70), angle=30)
 
 annotated = add_text(annotated, "Computer Vision", (100, 1200), font_scale=1.5)
 
-cv2.imwrite("data/output/all_annotations.jpg", annotated)
+from src.image_saver import save_image
+
+saved_path = save_image(annotated, "data/output/annotated_image.jpg")
 
 print("Original:", image.shape)
 print("Final annotated:", annotated.shape)
 print("All annotations completed!")
+
+print("Saved at:", saved_path)
+print("File exists:", saved_path.exists())
 
 
 # cv2.imshow("Annotated", text)
