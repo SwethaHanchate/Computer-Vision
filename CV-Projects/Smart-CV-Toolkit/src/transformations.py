@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 
 
 def resize_image(image, width=None, height=None):
@@ -74,3 +75,15 @@ def rotate_image(image, angle):
     rotated = cv2.warpAffine(image, rotation_matrix, (width, height))
 
     return rotated
+
+
+def translate_image(image, x_shift, y_shift):
+    """
+    Shifts image pixels horizontally, vertically or in both directions.
+    """
+    height, width = image.shape[:2]
+
+    translation_matrix = np.float32([[1, 0, x_shift], [0, 1, y_shift]])
+    translated = cv2.warpAffine(image, translation_matrix, (width, height))
+
+    return translated
