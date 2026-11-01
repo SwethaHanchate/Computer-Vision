@@ -61,3 +61,16 @@ def flip_image(image, direction):
         raise ValueError("Direction must be horizontal, vertical or both.")
 
     return flipped
+
+
+def rotate_image(image, angle):
+    """
+    Rotate an image aorund a point by given angle.
+    """
+    height, width = image.shape[:2]
+    center = (width // 2, height // 2)
+
+    rotation_matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
+    rotated = cv2.warpAffine(image, rotation_matrix, (width, height))
+
+    return rotated
