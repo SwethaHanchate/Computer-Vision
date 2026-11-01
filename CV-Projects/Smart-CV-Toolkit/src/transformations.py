@@ -42,3 +42,22 @@ def crop_image(image, x, y, width, height):
     cropped = image[y : y + height, x : x + width]
 
     return cropped
+
+
+def flip_image(image, direction):
+    """
+    Flips an image horizontally or vertically.
+    """
+    if direction == "horizontal":
+        flipped = cv2.flip(image, 1)
+
+    elif direction == "vertical":
+        flipped = cv2.flip(image, 0)
+
+    elif direction == "both":
+        flipped = cv2.flip(image, -1)
+
+    else:
+        raise ValueError("Direction must be horizontal, vertical or both.")
+
+    return flipped
