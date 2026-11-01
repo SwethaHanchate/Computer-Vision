@@ -1,15 +1,13 @@
 import cv2
 from pathlib import Path
+from src.validation import validate_video_path, validate_frame_data, validate_video_info
 
 
 def open_video(video_path):
     """
     Open a video at given path and validate access to it.
     """
-    video_path = Path(video_path)
-
-    if not video_path.exists():
-        raise FileNotFoundError(f"Video not found: {video_path}")
+    validate_video_path(video_path)
 
     capture = cv2.VideoCapture(str(video_path))
 
@@ -28,6 +26,8 @@ def read_frame(capture):
     if not success:
         return None
 
+    validate_frame_data(frame)
+
     return frame
 
 
@@ -38,12 +38,16 @@ def get_video_info(capture):
     frames per second and
     number of frames in the video.
     """
-    return {
+    video_info = {
         "width": int(capture.get(cv2.CAP_PROP_FRAME_WIDTH)),
         "height": int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT)),
         "fps": int(capture.get(cv2.CAP_PROP_FPS)),
         "total_frames": int(capture.get(cv2.CAP_PROP_FRAME_COUNT)),
     }
+
+    validate_video_info(video_info)
+
+    return video_info
 
 
 def extract_frames(capture):
