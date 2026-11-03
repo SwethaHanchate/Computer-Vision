@@ -13,6 +13,18 @@ from src.color_conversion import (
 from src.annotations import draw_line, draw_rectangle, draw_circle, draw_ellipse, add_text
 from src.image_saver import save_image
 
+from src.video_processor import (
+    open_video,
+    read_frame,
+    get_video_info,
+    extract_frames,
+    save_video_frames,
+    process_video_frames,
+    process_and_save_video,
+)
+
+from src.validation import validate_video_path
+
 st.set_page_config(page_title="Smart CV Toolkit", page_icon="📷", layout="wide")
 
 st.title("Smart CV Toolkit")
@@ -421,5 +433,137 @@ elif page == "Image Processing":
 
 
 elif page == "Video Processing":
+
     st.header("Video Processing")
-    st.info("Video processing features will be added here.")
+
+    uploaded_video = st.file_uploader("Upload a video", type=["mp4", "avi", "mov", "mkv"])
+
+    if uploaded_video is not None:
+
+        # Save uploaded video
+        input_video_path = Path("data/input") / uploaded_video.name
+
+        input_video_path.parent.mkdir(parents=True, exist_ok=True)
+
+        input_video_path.write_bytes(uploaded_video.getvalue())
+
+        st.success("Video uploaded successfully!")
+
+        try:
+            capture = open_video(input_video_path)
+
+            # Video Information
+            st.subheader("Video Information")
+
+            video_info = get_video_info(capture)
+
+            col1, col2, col3 = st.columns(3)
+
+            col1.metric("Width", video_info["width"])
+            col2.metric("Height", video_info["height"])
+            col3.metric("FPS", round(video_info["fps"], 2))
+
+            st.metric("Total Frames", video_info["total_frames"])
+
+            st.write("**Resolution:**", f'{video_info["width"]} x {video_info["height"]}')
+
+            st.write(
+                "**Duration:**", f'{video_info["total_frames"] / video_info["fps"]:.2f} seconds'
+            )
+
+            # Original Video Preview
+            st.subheader("Video Preview")
+
+            col1, col2, col3 = st.columns([1, 2, 1])
+
+            with col2:
+                st.video(uploaded_video.getvalue(), width=500)
+
+            st.divider()
+
+            # 1. Frame Extraction
+            st.subheader("1. Frame Extraction")
+
+            if st.button("Extract All Frames"):
+
+                capture.set(cv2.CAP_PROP_POS_FRAMES, 0)
+
+                frames = extract_frames(capture)
+
+                st.success(f"Extracted {len(frames)} frames successfully!")
+
+                if frames:
+
+                    display_frame = cv2.cvtColor(frames[0], cv2.COLOR_BGR2RGB)
+
+                    col1, col2, col3 = st.columns([1, 2, 1])
+
+                    with col2:
+                        st.image(display_frame, caption="First Extracted Frame", width=500)
+
+            # 2. Save Periodic Frames
+            st.divider()
+            st.subheader("2. Save Frames at Intervals")
+
+            frame_interval = st.number_input(
+                "Frame interval", min_value=1, max_value=1000, value=30, key="frame_interval"
+            )
+
+            if st.button("Save Periodic Frames"):
+
+                capture.set(cv2.CAP_PROP_POS_FRAMES, 0)
+
+                output_frames_dir = Path("data/output/extracted_frames")
+
+                saved_frames = save_video_frames(
+                    capture, output_frames_dir, interval=int(frame_interval)
+                )
+
+                st.success(f"Periodic frames saved to {output_frames_dir}")
+
+            # 3. Process Video Frames
+            st.divider()
+            st.subheader("3. Process Video Frames")
+
+            if st.button("Process Frames"):
+
+                capture.set(cv2.CAP_PROP_POS_FRAMES, 0)
+
+                processed_count = process_video_frames(capture)
+
+                st.success(f"Processed {processed_count} frames successfully!")
+
+            # 4. Grayscale Video Processing
+            st.divider()
+            st.subheader("4. Grayscale Video Processing")
+
+            if st.button("Process and Save Grayscale Video"):
+
+                capture.set(cv2.CAP_PROP_POS_FRAMES, 0)
+
+                output_video_path = Path("data/output/grayscale_video.mp4")
+
+                processed_count = process_and_save_video(capture, output_video_path)
+
+                st.success(f"Processed {processed_count} frames successfully!")
+
+                if output_video_path.exists():
+
+                    st.subheader("Processed Video Preview")
+
+                    col1, col2, col3 = st.columns([1, 2, 1])
+
+                    with col2:
+                        st.video(output_video_path.read_bytes(), width=500)
+
+                    st.download_button(
+                        label="Download Processed Video",
+                        data=output_video_path.read_bytes(),
+                        file_name="grayscale_video.mp4",
+                        mime="video/mp4",
+                    )
+
+            capture.release()
+
+        except ValueError as error:
+            st.error(str(error))
