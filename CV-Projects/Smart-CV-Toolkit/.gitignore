@@ -1,0 +1,29 @@
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# macOS files
+.DS_Store
+
+# IDE settings
+.vscode/
+.idea/
+
+# Streamlit configuration
+.streamlit/secrets.toml
+
+# Uploaded input files
+data/input/*
+
+# Generated output files
+data/output/*
+
+# Keep data folders in Git
+!data/input/.gitkeep
+!data/output/.gitkeep
