@@ -1,26 +1,60 @@
-
 # Smart CV Toolkit
 
-An interactive Computer Vision toolkit built using Python, OpenCV, NumPy, and Streamlit. It provides a simple interface for image and video processing operations.
+An interactive Computer Vision toolkit built using Python, OpenCV, NumPy, and Streamlit. This application provides a user-friendly interface for exploring image and video processing operations.
+
+## Application Screenshots
+
+### Home
+![Home](screenshots/home.png)
+
+### Image Processing
+![Image Processing](screenshots/image_processing/image_processing.png)
+
+#### Geometric Transformations
+| Resize | Crop |
+|---|---|
+| ![Resize](screenshots/image_processing/transformations/resized.png) | ![Crop](screenshots/image_processing/transformations/cropped.png) |
+
+| Flip | Rotate | Translate |
+|---|---|---|
+| ![Flip](screenshots/image_processing/transformations/flipped.png) | ![Rotate](screenshots/image_processing/transformations/rotated.png) | ![Translate](screenshots/image_processing/transformations/translated.png) |
+
+#### Color-Space Conversion
+| RGB | Grayscale |
+|---|---|
+| ![RGB](screenshots/image_processing/color_conversions/rgb.png) | ![Grayscale](screenshots/image_processing/color_conversions/grayscale.png) |
+
+| HSV | Lab |
+|---|---|
+| ![HSV](screenshots/image_processing/color_conversions/hsv.png) | ![Lab](screenshots/image_processing/color_conversions/lab.png) |
+
+#### Image Annotations
+| Line | Rectangle |
+|---|---|
+| ![Line](screenshots/image_processing/annotations/line.png) | ![Rectangle](screenshots/image_processing/annotations/rectangle.png) |
+
+| Circle | Ellipse | Text |
+|---|---|---|
+| ![Circle](screenshots/image_processing/annotations/circle.png) | ![Ellipse](screenshots/image_processing/annotations/ellipse.png) | ![Text](screenshots/image_processing/annotations/text.png) |
+
+### Video Processing
+![Video Processing](screenshots/video_processing/video_processing.png)
+
+#### Video Features
+![Video Features](screenshots/video_processing/video_features.png)
+
+#### Grayscale Video Processing
+![Processed Video](screenshots/video_processing/processed_video.png)
 
 ## Features
 
 ### Image Processing
 - Image upload and metadata extraction
 - Image resizing and cropping
-- Horizontal and vertical flipping
+- Horizontal, vertical, and combined flipping
 - Image rotation and translation
-- Color-space conversion:
-  - RGB
-  - Grayscale
-  - HSV
-  - Lab
-- Image annotations:
-  - Lines
-  - Rectangles
-  - Circles
-  - Ellipses
-  - Text labels
+- RGB, Grayscale, HSV, and Lab conversion
+- Image annotations: lines, rectangles, circles, ellipses, and text
 - Save and download processed images
 
 ### Video Processing
@@ -45,18 +79,14 @@ An interactive Computer Vision toolkit built using Python, OpenCV, NumPy, and St
 Smart-CV-Toolkit/
 ├── app.py
 ├── src/
-│   ├── __init__.py
-│   ├── image_loader.py
-│   ├── image_info.py
-│   ├── transformations.py
-│   ├── color_conversion.py
-│   ├── annotations.py
-│   ├── video_processor.py
-│   ├── validation.py
-│   └── image_saver.py
 ├── data/
-│   ├── input/
-│   └── output/
+├── screenshots/
+│   ├── home.png
+│   ├── image_processing/
+│   │   ├── annotations/
+│   │   ├── color_conversions/
+│   │   └── transformations/
+│   └── video_processing/
 ├── requirements.txt
 └── README.md
 ```
@@ -102,33 +132,11 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-The application will open in your browser.
-
-## Usage
-
-1. Select Image Processing or Video Processing from the sidebar.
-2. Upload an image or video.
-3. Select the operation you want to perform.
-4. View the processed result.
-5. Save or download the output.
-
-## Learning Outcomes
-
-This project demonstrates practical implementation of:
-
-- Image representation and processing using NumPy and OpenCV
-- Geometric image transformations
-- Color-space conversions
-- Image annotation techniques
-- Video capture and frame extraction
-- Video processing and encoding
-- Input validation and error handling
-- Building interactive Computer Vision applications
-
 ## Future Enhancements
 
 - Image filtering and enhancement
 - Edge detection and thresholding
+- Morphological operations
 - Image segmentation
 - Object detection integration
 - Real-time webcam processing
