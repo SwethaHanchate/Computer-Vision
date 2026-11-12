@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import streamlit as st
 from pathlib import Path
+import matplotlib.pyplot as plt
 from src.image_info import get_image_info
 from src.transformations import resize_image, crop_image, flip_image, rotate_image, translate_image
 from src.color_conversion import (
@@ -34,6 +35,12 @@ from src.image_enhancement import (
     apply_contrast_stretching,
     apply_histogram_equalization,
     apply_clahe,
+)
+
+
+from src.image_histogram import (
+    create_grayscale_histogram,
+    create_rgb_histogram,
 )
 
 st.set_page_config(page_title="Smart CV Toolkit", page_icon="📷", layout="wide")
@@ -580,6 +587,36 @@ elif page == "Image Processing":
                             "CLAHE Enhanced Image",
                             "clahe_image.png",
                         )
+
+            # 5. Image Histogram Visualization
+            with st.expander("5. Image Histogram Visualization"):
+
+                histogram_type = st.selectbox(
+                    "Select Histogram Type",
+                    [
+                        "Grayscale Histogram",
+                        "RGB Histogram",
+                    ],
+                    key="histogram_type",
+                )
+
+                if histogram_type == "Grayscale Histogram":
+                    histogram_fig = create_grayscale_histogram(image)
+
+                    st.pyplot(histogram_fig)
+                    plt.close(histogram_fig)
+
+                elif histogram_type == "RGB Histogram":
+                    if image.ndim == 2:
+                        st.warning(
+                            "RGB Histogram requires a color image. "
+                            "Please upload a 3-channel color image."
+                        )
+                    else:
+                        histogram_fig = create_rgb_histogram(image)
+
+                        st.pyplot(histogram_fig)
+                        plt.close(histogram_fig)
 
 
 elif page == "Video Processing":
